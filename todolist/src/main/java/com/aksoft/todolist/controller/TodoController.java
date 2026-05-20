@@ -32,10 +32,34 @@ public class TodoController {
     @PutMapping("/update_task/{id}")
     public ResponseEntity<String> updateTask(@PathVariable Long id, @RequestBody Todo todo){
         try{
+            System.out.println(todo.toString());
+            if(todo.isDeleted()){
+                return ResponseUtils.finalResponse(HttpStatus.METHOD_NOT_ALLOWED, "Deletion not allowed!", null);
+            }
             return ResponseUtils.finalResponse(HttpStatus.OK, "Task is updated successfully!", todoService.updateTask(id, todo));
         }catch (Exception e){
             return ResponseUtils.finalResponse(HttpStatus.NOT_FOUND, e.getMessage(), null);
         }
-
     }
+
+    @DeleteMapping("/delete_task/{id}")
+    public ResponseEntity<String> deleteTask(@PathVariable Long id){
+        try {
+            todoService.deleteTask(id);
+            return ResponseUtils.finalResponse(HttpStatus.OK, "Task is deleted successfully!", null);
+        } catch (Exception e) {
+            return ResponseUtils.finalResponse(HttpStatus.NOT_FOUND, e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/get_task_details/{id}")
+    public ResponseEntity<String> getTaskDetails(@PathVariable Long id){
+        try {
+            Todo todo = todoService.getTaskDetails(id);
+            return ResponseUtils.finalResponse(HttpStatus.OK, "task details found!", todo);
+        } catch (Exception e){
+            return ResponseUtils.finalResponse(HttpStatus.NOT_FOUND, e.getMessage(), null);
+        }
+    }
+
 }

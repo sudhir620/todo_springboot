@@ -21,7 +21,7 @@ public class TodoService {
     }
 
     public Todo updateTask(Long id, Todo todo){
-        Todo existingTask = todoRepository.findById(id).orElseThrow(()->new RuntimeException("Task not found"));
+        Todo existingTask = todoRepository.findByIdAndDeletedFalse(id).orElseThrow(()->new RuntimeException("Task not found!"));
         existingTask.setTaskName(todo.getTaskName());
         existingTask.setTaskDescription(todo.getTaskDescription());
         existingTask.setTaskStatus(todo.getTaskStatus());
@@ -29,6 +29,16 @@ public class TodoService {
     }
 
     public List<Todo> getAllTasks(){
-        return todoRepository.findAll();
+        return todoRepository.findAllByDeletedFalse();
+    }
+
+    public void deleteTask(Long id){
+        Todo existingTodo = todoRepository.findByIdAndDeletedFalse(id).orElseThrow(()->new RuntimeException(("Task not found or already deleted!")));
+        existingTodo.setDeleted(true);
+        todoRepository.save(existingTodo);
+    }
+
+    public Todo getTaskDetails(Long id) {
+        return todoRepository.findByIdAndDeletedFalse(id).orElseThrow(()->new RuntimeException(("Task not found or already deleted!")));
     }
 }

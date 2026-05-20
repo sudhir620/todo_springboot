@@ -11,19 +11,9 @@ public class Todo {
     private String taskDescription;
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
+    private boolean deleted = false;
 
     public Todo() {
-    }
-
-    public Todo(Long id, String taskName, String taskDescription, TaskStatus taskStatus) {
-        this(taskName, taskDescription, taskStatus);
-        this.id = id;
-    }
-
-    public Todo(String taskName, String taskDescription, TaskStatus taskStatus) {
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-        this.taskStatus = taskStatus;
     }
 
     public String getTaskName() {
@@ -50,8 +40,27 @@ public class Todo {
         this.taskStatus = taskStatus;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public enum TaskStatus{
         PENDING,
         COMPLETED
+    }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", taskName='" + taskName + '\'' +
+                ", taskDescription='" + taskDescription + '\'' +
+                ", taskStatus=" + taskStatus +
+                ", isDeleted=" + deleted +
+                '}';
     }
 }
