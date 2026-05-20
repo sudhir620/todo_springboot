@@ -32,7 +32,6 @@ public class TodoController {
     @PutMapping("/update_task/{id}")
     public ResponseEntity<String> updateTask(@PathVariable Long id, @RequestBody Todo todo){
         try{
-            System.out.println(todo.toString());
             if(todo.isDeleted()){
                 return ResponseUtils.finalResponse(HttpStatus.METHOD_NOT_ALLOWED, "Deletion not allowed!", null);
             }
