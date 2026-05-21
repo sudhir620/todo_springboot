@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todo List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f5f7fb;
+        }
+
+        .todo-container {
+            margin-top: 50px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-item.completed span {
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container todo-container">
+    <div class="row g-4">
+
+        <!-- LEFT SIDE - ADD TASK -->
+        <div class="col-md-4">
+            <div class="card shadow p-4">
+                <h3 class="mb-4">Add Task</h3>
+
+                <form id="todoForm">
+                    <div class="mb-3">
+                        <label class="form-label">Task Name</label>
+                        <label for="taskInput1"></label><input type="text"
+                                                               class="form-control"
+                                                               id="taskInput1"
+                                                               placeholder="Enter task"
+                                                               required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Task Description</label>
+                        <label for="taskInput2"></label><input type="text"
+                                                               class="form-control"
+                                                               id="taskInput2"
+                                                               placeholder="Enter task"
+                                                               required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Add Task
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE - TASK LIST -->
+        <div class="col-md-8">
+            <div class="card shadow p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Task List</h3>
+                    <span class="badge bg-primary" id="taskCount">0 Tasks</span>
+                </div>
+
+                <ul class="list-group" id="taskList">
+                    <!-- Tasks will appear here -->
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const todoForm = document.getElementById('todoForm');
+    const taskInput1 = document.getElementById('taskInput1');
+    const taskInput2 = document.getElementById('taskInput2');
+    const taskList = document.getElementById('taskList');
+    const taskCount = document.getElementById('taskCount');
+
+    let count = 0;
+
+    todoForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const taskText = taskInput1.value.trim();
+        const taskDescription = taskInput2.value.trim();
+
+        if (taskText === '' || taskDescription === '') return;
+
+        // Create list item
+        const li = document.createElement('li');
+        li.className = 'list-group-item task-item';
+
+        li.innerHTML = `
+            <div>
+                <h3>${taskText}</h3>
+                <p>${taskDescription}</p>
+            </div>
+
+            <div>
+                <button class="btn btn-success btn-sm me-2 complete-btn">
+                    Complete
+                </button>
+
+                <button class="btn btn-danger btn-sm delete-btn">
+                    Delete
+                </button>
+            </div>
+        `;
+
+        // Complete button
+        li.querySelector('.complete-btn').addEventListener('click', function() {
+            li.classList.toggle('completed');
+        });
+
+        // Delete button
+        li.querySelector('.delete-btn').addEventListener('click', function() {
+            li.remove();
+            updateCount();
+        });
+
+        taskList.appendChild(li);
+
+        taskInput1.value = '';
+        taskInput2.value = '';
+
+        updateCount();
+    });
+
+    function updateCount() {
+        count = taskList.children.length;
+        taskCount.innerText = `${count} Tasks`;
+    }
+</script>
+
+</body>
+</html>
